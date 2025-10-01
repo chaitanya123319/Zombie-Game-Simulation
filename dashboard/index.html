@@ -1,196 +1,46 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Animated Zombie Game UI</title>
+<title>Zombie Game BFS & Graph</title>
 <style>
-  body {
-    background: #121212;
-    background-image: url('generated-image.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-attachment: fixed;
-    color: #e0e0e0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 20px;
-  }
-  body::before {
-    content: "";
-    position: fixed;
-    top:0; left:0; right:0; bottom:0;
-    background: rgba(18,18,18,0.82);
-    z-index: -1;
-  }
-  h1 {
-    color: #ff3b3f;
-    margin-bottom: 10px;
-    font-size: 2.2em;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-align: center;
-  }
-  #container {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 48px;
-    margin-top: 20px;
-  }
-  #game-area {
-    min-width: 450px;
-    text-align: center;
-  }
-  #game-board {
-    display: grid;
-    grid-template-columns: repeat(5, 60px);
-    grid-gap: 5px;
-    justify-content: center;
-    margin-bottom: 18px;
-  }
-  .cell {
-    width: 60px; height: 60px;
-    background: #333;
-    border-radius: 8px;
-    line-height: 60px;
-    font-weight: bold;
-    font-size: 25px;
-    color: #fff;
-    user-select: none;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-  .player { background: #ff4f4f; }
-  .zombie { background: #4caf50; }
-  .zombie.fast { background: #ff9800; }
-  .cell.health-pack {
-    background: #2196f3;
-  }
-  .icon-img {
-    width: 44px;
-    height: 44px;
-    object-fit: contain;
-    display: block;
-    margin: auto;
-    pointer-events: none;
-    user-select: none;
-  }
-  #status {
-    background: #1f1f1f;
-    border-radius: 12px;
-    padding: 10px 25px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.17);
-  }
-  .status-item {
-    margin: 10px 0;
-    font-weight: 600;
-    font-size: 18px;
-    display: flex; justify-content: space-between;
-  }
-  #health-bar {
-    height: 20px;
-    background: #555;
-    border-radius: 10px;
-    overflow: hidden;
-    width: 96%;
-    margin: 6px auto;
-  }
-  #health-fill {
-    height: 100%;
-    background: #4caf50;
-    width: 100%;
-    transition: width 0.3s, background 0.3s;
-  }
-  #controls {
-    margin-top: 15px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 30px;
-  }
-  button {
-    padding: 12px 20px;
-    font-size: 15px;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    background: #555;
-    color: #eee;
-    user-select: none;
-    transition: background-color 0.18s;
-    margin-bottom: 6px;
-    min-width:120px;
-  }
-  button:hover {
-    background: #ff4f4f;
-  }
-  button:disabled {
-    background: #666 !important;
-    cursor: not-allowed;
-  }
-  #messages {
-    background: #222;
-    min-width: 270px;
-    max-width: 320px;
-    min-height: 120px;
-    border-radius: 8px;
-    padding: 14px 18px;
-    text-align: left;
-    font-size: 14px;
-    color: #ddd;
-    overflow-y: auto;
-    max-height: 420px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.18);
-  }
-  #modal {
-    display:none;
-    position: fixed;
-    top:0; left:0; right:0; bottom:0;
-    background: rgba(0,0,0,0.84);
-    color:#fff;
-    font-size: 1.5em;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    z-index: 10;
-  }
-  #modal.show {
-    display: flex;
-  }
-  #modal button {
-    margin-top: 15px;
-    font-size: 1em;
-    padding: 10px 22px;
-    background: #2196f3;
-    border-radius: 6px;
-    border: none;
-  }
-  @keyframes slideRight { from { transform: translateX(0); } to { transform: translateX(60px); }}
-  @keyframes slideLeft { from { transform: translateX(0); } to { transform: translateX(-60px); }}
-  @keyframes slideUp { from { transform: translateY(0); } to { transform: translateY(-60px); }}
-  @keyframes slideDown { from { transform: translateY(0); } to { transform: translateY(60px); }}
-  @keyframes flashAttack {
-    0%, 100% { background-color: #ff4f4f; }
-    50% { background-color: #fff; }
-  }
-  .animate-move-right { animation: slideRight 0.3s forwards; }
-  .animate-move-left { animation: slideLeft 0.3s forwards; }
-  .animate-move-up { animation: slideUp 0.3s forwards; }
-  .animate-move-down { animation: slideDown 0.3s forwards; }
-  .animate-attack { animation: flashAttack 0.5s; }
+/* Use your previous CSS here for grid, .cell, .icon-img, etc. */
+body {
+  background: #121212;
+  color: #e0e0e0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+#container { display: flex; align-items: flex-start; justify-content: center; gap: 48px; margin-top: 20px; }
+#game-area { min-width: 450px; text-align: center; }
+#game-board {
+  display: grid;
+  grid-template-columns: repeat(5, 60px);
+  grid-gap: 5px;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+.cell {
+  width: 60px; height: 60px;
+  background: #333;
+  border-radius: 8px;
+  line-height: 60px;
+  font-weight: bold;
+  font-size: 25px;
+  color: #fff;
+  user-select: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  position: relative;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.icon-img { width: 44px; height: 44px; object-fit: contain; display: block; margin: auto; pointer-events: none; user-select: none;}
+/* ... rest of your status, messages, modal, button CSS stays same ... */
 </style>
 </head>
 <body>
   <div id="container">
     <div id="game-area">
-      <h1>Animated Zombie Game UI</h1>
+      <h1>Zombie Game Simulation</h1>
       <div id="game-board"></div>
       <div id="status">
         <div class="status-item"><span>Health:</span><span id="health-text">100</span></div>
@@ -217,7 +67,8 @@
     const GRID_SIZE = 5;
     const MAX_ZOMBIES = 5;
     const HEALTH_PACK_COUNT = 2;
-    const PLAYER_ICON = "player_icon.png";  
+    // Use the icon names exactly as in your folder
+    const PLAYER_ICON = "player_icon.png";
     const ZOMBIE_ICON = "zombie_icon.png";
     const HEALTH_ICON = "health_icon.png";
 
@@ -250,39 +101,59 @@
     }
 
     function animateMove(element, oldPos, newPos) {
-      let dx = newPos.x - oldPos.x;
-      let dy = newPos.y - oldPos.y;
-      let animClass = '';
-      if(dx === 1) animClass = 'animate-move-right';
-      else if(dx === -1) animClass = 'animate-move-left';
-      else if(dy === 1) animClass = 'animate-move-down';
-      else if(dy === -1) animClass = 'animate-move-up';
-      if(animClass) {
-        element.classList.add(animClass);
-        element.addEventListener('animationend', () => {
-          element.classList.remove(animClass);
-        }, {once: true});
-      }
+      // ... animation code can be reused from your earlier CSS/JS ...
     }
 
     function animateAttack(cell) {
-      cell.classList.add('animate-attack');
-      cell.addEventListener('animationend', () => {
-        cell.classList.remove('animate-attack');
-      }, {once: true});
+      // ... animation code can be reused from your earlier CSS/JS ...
     }
+
+    // --------- BFS PATHFINDING ---------
+    function getNeighbors(x, y, gridSize, forbidden=[]) {
+      const moves = [
+        {x: x+1, y: y},
+        {x: x-1, y: y},
+        {x: x, y: y+1},
+        {x: x, y: y-1}
+      ];
+      return moves.filter(pos =>
+        pos.x >= 0 && pos.x < gridSize &&
+        pos.y >= 0 && pos.y < gridSize &&
+        !forbidden.some(f => f.x === pos.x && f.y === pos.y)
+      );
+    }
+
+    function bfs(start, goal, gridSize, forbidden=[]) {
+      const queue = [{x: start.x, y: start.y, path: []}];
+      const visited = new Set();
+      visited.add(`${start.x},${start.y}`);
+
+      while (queue.length) {
+        const {x, y, path} = queue.shift();
+        if (x === goal.x && y === goal.y) {
+          return path;
+        }
+        for (const n of getNeighbors(x, y, gridSize, forbidden)) {
+          const key = `${n.x},${n.y}`;
+          if (!visited.has(key)) {
+            visited.add(key);
+            queue.push({x: n.x, y: n.y, path: [...path, {x: n.x, y: n.y}]});
+          }
+        }
+      }
+      return null; // No path found
+    }
+    // --------- END BFS PATHFINDING ---------
 
     function render() {
       createGrid();
       const cells = board.children;
 
-      // Clear old cells content
       for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
         cells[i].textContent = '';
         cells[i].className = 'cell';
       }
 
-      // Render health packs
       healthPacks.forEach(p => {
         if(p.alive){
           let idx = p.y * GRID_SIZE + p.x;
@@ -291,27 +162,21 @@
         }
       });
 
-      // Render zombies with image
       zombies.forEach((z, idx) => {
         if(z.alive) {
           let idxCell = z.y * GRID_SIZE + z.x;
           cells[idxCell].classList.add('zombie');
-          if(z.type === 'fast') cells[idxCell].classList.add('fast');
           cells[idxCell].innerHTML = `<img src="${ZOMBIE_ICON}" alt="Zombie" class="icon-img">`;
-          if(prevZombiesPos[idx]) animateMove(cells[idxCell], prevZombiesPos[idx], z);
         }
       });
 
-      // Render player with image
       let playerIndex = player.y * GRID_SIZE + player.x;
       cells[playerIndex].classList.add('player');
       cells[playerIndex].innerHTML = `<img src="${PLAYER_ICON}" alt="Player" class="icon-img">`;
-      if(prevPlayerPos) animateMove(cells[playerIndex], prevPlayerPos, player);
 
       prevPlayerPos = {...player};
       prevZombiesPos = zombies.map(z => ({x: z.x, y: z.y}));
 
-      // Update status values
       healthText.textContent = player.health;
       healthFill.style.width = Math.max(0, player.health) + '%';
       healthFill.style.backgroundColor = player.health > 60 ? '#4caf50'
@@ -337,10 +202,8 @@
       for(let i=0; i < MAX_ZOMBIES; i++) {
         let pos = randomCell([{x: player.x, y: player.y}, ...zombies]);
         zombies.push({
-          x: pos.x, y: pos.y, health: 50, alive: true,
-          type: (Math.random() > 0.7) ? 'fast' : 'regular'
+          x: pos.x, y: pos.y, health: 50, alive: true
         });
-        zombies[i].lastMove = 0;
       }
     }
 
@@ -359,28 +222,30 @@
     }
 
     function moveZombies() {
-      let now = Date.now();
-      zombies.forEach(z => {
-        if(!z.alive) return;
-        if(z.type === 'fast' && now - z.lastMove < 600) return;
-        z.lastMove = now;
-        if(z.x < player.x) z.x++;
-        else if(z.x > player.x) z.x--;
-        if(z.y < player.y) z.y++;
-        else if(z.y > player.y) z.y--;
+      const forbidden = zombies.filter(z => z.alive).map(z => ({x: z.x, y: z.y}));
+      for (let i = 0; i < zombies.length; i++) {
+        let z = zombies[i];
+        if(!z.alive) continue;
+        let forbiddenForThis = forbidden.filter((pos, idx) => idx !== i);
 
+        let path = bfs(z, player, GRID_SIZE, forbiddenForThis);
+
+        if (path && path.length > 0) {
+          z.x = path[0].x;
+          z.y = path[0].y;
+        }
         if(isAdjacent(z.x, z.y, player.x, player.y)) {
           player.health -= 10;
           addMessage("Zombie attacked you! Health now " + player.health);
           let cells = board.children;
           let attackedPlayerIndex = player.y * GRID_SIZE + player.x;
-          animateAttack(cells[attackedPlayerIndex]);
+          //animateAttack(cells[attackedPlayerIndex]);
           if(player.health <= 0){
             showGameOver("You died! Game Over.");
             disableControls();
           }
         }
-      });
+      }
     }
 
     function playerAttack() {
@@ -390,7 +255,7 @@
         if(z.alive && isAdjacent(player.x, player.y, z.x, z.y)) {
           z.health -= 30;
           let attackedIndex = z.y * GRID_SIZE + z.x;
-          animateAttack(cells[attackedIndex]);
+          //animateAttack(cells[attackedIndex]);
           addMessage("Attacked Zombie! Zombie health now " + z.health);
           if(z.health <= 0) {
             z.alive = false;
@@ -496,5 +361,642 @@
 
     restartGame();
   </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zombie Game: BFS & Graph Edition</title>
+    <style>
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, rgba(18, 18, 18, 0.7) 0%, rgba(26, 26, 46, 0.7) 50%, rgba(22, 33, 62, 0.7) 100%), 
+                        url("bg_icon.png") no-repeat center center fixed;
+            background-size: cover;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 10px; /* Reduced padding for compactness */
+            text-align: center;
+            min-height: 100vh;
+            overflow: hidden; /* Prevent scrolling */
+        }
+        h1 {
+            color: #ff3b3f;
+            text-shadow: 0 0 10px rgba(255, 59, 63, 0.5);
+            margin-bottom: 8px; /* Reduced margin */
+            font-size: 2em; /* Slightly smaller for compactness */
+            letter-spacing: 2px;
+        }
+
+        /* Container */
+        #container {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start; /* Shift slightly right */
+            margin-left: 10%; /* Right offset */
+            gap: 24px; /* Reduced gap for compactness */
+            margin-top: 10px; /* Reduced margin */
+            flex-wrap: wrap;
+        }
+        #game-area {
+            min-width: 400px; /* Slightly reduced for smaller screens */
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px; /* Reduced padding */
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Game Board */
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(5, 60px);
+            grid-gap: 5px;
+            justify-content: center;
+            margin: 0 auto 15px; /* Reduced margin */
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        .cell {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(145deg, #2a2a2a, #1f1f1f);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 25px;
+            color: #fff;
+            user-select: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+        .cell:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+        }
+        .cell.player {
+            background: linear-gradient(145deg, #4caf50, #388e3c);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+        }
+        .cell.zombie {
+            background: linear-gradient(145deg, #f44336, #d32f2f);
+            box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+            animation: pulse 1s infinite alternate;
+        }
+        .cell.health-pack {
+            background: linear-gradient(145deg, #2196f3, #1976d2);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+        }
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+        .icon-img {
+            width: 44px;
+            height: 44px;
+            object-fit: contain;
+            display: block;
+            margin: auto;
+            pointer-events: none;
+            user-select: none;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        /* Status Panel */
+        #status {
+            margin: 15px auto; /* Reduced margin */
+            max-width: 300px;
+            padding: 10px; /* Reduced padding */
+            background: rgba(31, 31, 31, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px; /* Reduced margin */
+            font-size: 1em; /* Slightly smaller */
+        }
+        .status-item span:first-child {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+        #health-bar {
+            width: 100%;
+            background: #555;
+            border-radius: 8px;
+            height: 18px; /* Slightly smaller */
+            overflow: hidden;
+            margin: 8px 0; /* Reduced margin */
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        #health-fill {
+            height: 100%;
+            transition: width 0.5s ease, background-color 0.3s ease;
+            border-radius: 8px 0 0 8px;
+        }
+        .zombie-count, .score, .round {
+            font-size: 1.6em; /* Slightly smaller */
+            margin-top: 8px; /* Reduced margin */
+            color: #ffcc00;
+            text-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
+        }
+
+        /* Controls */
+        #controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px; /* Reduced gap */
+            max-width: 300px;
+            margin: 15px auto; /* Reduced margin */
+        }
+        #controls button {
+            padding: 10px 6px; /* Reduced padding */
+            background: linear-gradient(145deg, #555, #444);
+            color: #e0e0e0;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9em; /* Slightly smaller */
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        #controls button:hover:not(:disabled) {
+            background: linear-gradient(145deg, #666, #555);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        #controls button:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        #controls button[data-action="f"] {
+            background: linear-gradient(145deg, #f44336, #d32f2f);
+            color: #fff;
+            grid-column: span 3;
+        }
+        #controls button[data-action="f"]:hover:not(:disabled) {
+            background: linear-gradient(145deg, #ff5722, #e64a19);
+        }
+
+        /* Messages */
+        #messages {
+            min-height: 100px; /* Reduced height */
+            max-height: 150px; /* Reduced max-height */
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            padding: 10px; /* Reduced padding */
+            margin: 15px auto; /* Reduced margin */
+            max-width: 400px;
+            text-align: left;
+            font-size: 0.85em; /* Slightly smaller */
+            line-height: 1.3;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+            scrollbar-width: thin;
+            scrollbar-color: #ff3b3f #333;
+        }
+        #messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        #messages::-webkit-scrollbar-track {
+            background: #333;
+            border-radius: 3px;
+        }
+        #messages::-webkit-scrollbar-thumb {
+            background: #ff3b3f;
+            border-radius: 3px;
+        }
+        #messages p {
+            margin: 4px 0; /* Reduced margin */
+            padding: 4px; /* Reduced padding */
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            border-left: 3px solid #ff3b3f;
+        }
+
+        /* Modal */
+        #modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        #modal.show {
+            display: flex;
+        }
+        #modal > div {
+            background: linear-gradient(145deg, #1f1f1f, #2a2a2a);
+            padding: 20px; /* Reduced padding */
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            max-width: 350px; /* Slightly smaller */
+        }
+        #modal-message {
+            font-size: 1.3em; /* Slightly smaller */
+            margin-bottom: 15px; /* Reduced margin */
+            color: #ffcc00;
+        }
+        #restart-btn {
+            padding: 10px 20px; /* Reduced padding */
+            background: linear-gradient(145deg, #4caf50, #388e3c);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em; /* Slightly smaller */
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        #restart-btn:hover {
+            background: linear-gradient(145deg, #66bb6a, #4caf50);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            #container { 
+                flex-direction: column; 
+                align-items: center; 
+                gap: 15px; /* Reduced gap */
+                margin-left: 0; /* Center on mobile */
+                justify-content: center;
+            }
+            #game-board { grid-template-columns: repeat(5, 50px); }
+            .cell { width: 50px; height: 50px; font-size: 20px; }
+            .icon-img { width: 36px; height: 36px; }
+            #controls { grid-template-columns: 1fr; }
+            #game-area { min-width: 300px; padding: 10px; }
+            #messages { max-height: 120px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="game-area">
+            <h1>🧟‍♂️ Zombie Game Simulation 🧟‍♂️</h1>
+            <div id="game-board"></div>
+            <div id="status">
+                <div class="status-item"><span>Health:</span><span id="health-text">100</span></div>
+                <div id="health-bar"><div id="health-fill"></div></div>
+                <div class="status-item"><span>Score:</span><span id="score">0</span></div>
+                <div class="status-item"><span>Zombies Left:</span><span id="zombie-count">5</span></div>
+                <div class="status-item"><span>Round:</span><span id="round-num">1</span></div>
+            </div>
+            <div id="controls">
+                <button data-action="w">↑ Up (W)</button>
+                <button data-action="a">← Left (A)</button>
+                <button data-action="s">↓ Down (S)</button>
+                <button data-action="d">→ Right (D)</button>
+                <button data-action="f">⚔️ Attack (F)</button>
+            </div>
+        </div>
+        <div id="messages" aria-live="polite"></div>
+    </div>
+    <div id="modal">
+        <div>
+            <div id="modal-message"></div>
+            <button id="restart-btn">🔄 Restart Game</button>
+        </div>
+    </div>
+
+    <script>
+        const GRID_SIZE = 5;
+        const MAX_ZOMBIES = 5;
+        const HEALTH_PACK_COUNT = 2;
+        // Use the icon names exactly as in your folder (or placeholders)
+        const PLAYER_ICON = "player_icon.png"; // Replace with actual path if needed
+        const ZOMBIE_ICON = "zombie_icon.png";
+        const HEALTH_ICON = "health_icon.png";
+
+        let player = { x: 2, y: 2, health: 100, score: 0 };
+        let zombies = [];
+        let healthPacks = [];
+        let round = 1, gameOver = false;
+
+        const board = document.getElementById('game-board');
+        const healthText = document.getElementById('health-text');
+        const healthFill = document.getElementById('health-fill');
+        const scoreText = document.getElementById('score');
+        const zombieCountText = document.getElementById('zombie-count');
+        const roundNumText = document.getElementById('round-num');
+        const messages = document.getElementById('messages');
+        const modal = document.getElementById('modal');
+        const modalMessage = document.getElementById('modal-message');
+        const restartBtn = document.getElementById('restart-btn');
+
+        let prevPlayerPos = null;
+        let prevZombiesPos = [];
+
+        function createGrid() {
+            board.innerHTML = '';
+            for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                board.appendChild(cell);
+            }
+        }
+
+        function animateMove(element, oldPos, newPos) {
+            // Simple CSS animation for movement
+            element.style.transition = 'transform 0.3s ease';
+            element.style.transform = 'scale(1.2)';
+            setTimeout(() => { element.style.transform = 'scale(1)'; }, 150);
+        }
+
+        function animateAttack(cell) {
+            cell.style.animation = 'pulse 0.5s ease-in-out';
+            setTimeout(() => { cell.style.animation = ''; }, 500);
+        }
+
+        // --------- BFS PATHFINDING ---------
+        function getNeighbors(x, y, gridSize, forbidden=[]) {
+            const moves = [
+                {x: x+1, y: y},
+                {x: x-1, y: y},
+                {x: x, y: y+1},
+                {x: x, y: y-1}
+            ];
+            return moves.filter(pos =>
+                pos.x >= 0 && pos.x < gridSize &&
+                pos.y >= 0 && pos.y < gridSize &&
+                !forbidden.some(f => f.x === pos.x && f.y === pos.y)
+            );
+        }
+
+        function bfs(start, goal, gridSize, forbidden=[]) {
+            const queue = [{x: start.x, y: start.y, path: []}];
+            const visited = new Set();
+            visited.add(`${start.x},${start.y}`);
+
+            while (queue.length) {
+                const {x, y, path} = queue.shift();
+                if (x === goal.x && y === goal.y) {
+                    return path;
+                }
+                for (const n of getNeighbors(x, y, gridSize, forbidden)) {
+                    const key = `${n.x},${n.y}`;
+                    if (!visited.has(key)) {
+                        visited.add(key);
+                        queue.push({x: n.x, y: n.y, path: [...path, {x: n.x, y: n.y}]});
+                    }
+                }
+            }
+            return null; // No path found
+        }
+        // --------- END BFS PATHFINDING ---------
+
+        function render() {
+            createGrid();
+            const cells = board.children;
+
+            for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
+                cells[i].textContent = '';
+                cells[i].className = 'cell';
+            }
+
+            healthPacks.forEach(p => {
+                if(p.alive){
+                    let idx = p.y * GRID_SIZE + p.x;
+                    cells[idx].classList.add('health-pack');
+                    cells[idx].innerHTML = `<img src="${HEALTH_ICON}" alt="Health" class="icon-img">`;
+                }
+            });
+
+            zombies.forEach((z, idx) => {
+                if(z.alive) {
+                    let idxCell = z.y * GRID_SIZE + z.x;
+                    cells[idxCell].classList.add('zombie');
+                    cells[idxCell].innerHTML = `<img src="${ZOMBIE_ICON}" alt="Zombie" class="icon-img">`;
+                    if (prevZombiesPos[idx] && (z.x !== prevZombiesPos[idx].x || z.y !== prevZombiesPos[idx].y)) {
+                        animateMove(cells[idxCell], prevZombiesPos[idx], z);
+                    }
+                }
+            });
+
+            let playerIndex = player.y * GRID_SIZE + player.x;
+            cells[playerIndex].classList.add('player');
+            cells[playerIndex].innerHTML = `<img src="${PLAYER_ICON}" alt="Player" class="icon-img">`;
+            if (prevPlayerPos && (player.x !== prevPlayerPos.x || player.y !== prevPlayerPos.y)) {
+                animateMove(cells[playerIndex], prevPlayerPos, player);
+            }
+
+            prevPlayerPos = {...player};
+            prevZombiesPos = zombies.map(z => ({x: z.x, y: z.y}));
+
+            healthText.textContent = player.health;
+            healthFill.style.width = Math.max(0, player.health) + '%';
+            healthFill.style.backgroundColor = player.health > 60 ? '#4caf50'
+                                        : player.health > 30 ? '#ffeb3b'
+                                        : '#f44336';
+
+            scoreText.textContent = player.score;
+            zombieCountText.textContent = zombies.filter(z => z.alive).length;
+            roundNumText.textContent = round;
+        }
+
+        function randomCell(ignorePositions = []) {
+            let x, y;
+            do {
+                x = Math.floor(Math.random() * GRID_SIZE);
+                y = Math.floor(Math.random() * GRID_SIZE);
+            } while (ignorePositions.some(p => p.x === x && p.y === y));
+            return {x, y};
+        }
+
+        function initZombies() {
+            zombies = [];
+            for(let i=0; i < MAX_ZOMBIES; i++) {
+                let pos = randomCell([{x: player.x, y: player.y}, ...zombies.map(z => ({x: z.x, y: z.y}))]);
+                zombies.push({
+                    x: pos.x, y: pos.y, health: 50, alive: true
+                });
+            }
+        }
+
+        function initHealthPacks() {
+            healthPacks = [];
+            let forbidden = [{x: player.x, y: player.y}, ...zombies.map(z => ({x: z.x, y: z.y}))];
+            for(let i=0; i < HEALTH_PACK_COUNT; i++) {
+                let pos = randomCell(forbidden);
+                healthPacks.push({...pos, alive: true});
+                forbidden.push(pos);
+            }
+        }
+
+        function isAdjacent(x1, y1, x2, y2) {
+            return Math.abs(x1-x2) <=1 && Math.abs(y1 - y2) <=1;
+        }
+
+        function moveZombies() {
+            const forbidden = zombies.filter(z => z.alive).map(z => ({x: z.x, y: z.y}));
+            for (let i = 0; i < zombies.length; i++) {
+                let z = zombies[i];
+                if(!z.alive) continue;
+                let forbiddenForThis = forbidden.filter((pos, idx) => idx !== i);
+
+                let path = bfs(z, player, GRID_SIZE, forbiddenForThis);
+
+                if (path && path.length > 0) {
+                    z.x = path[0].x;
+                    z.y = path[0].y;
+                }
+                if(isAdjacent(z.x, z.y, player.x, player.y)) {
+                    player.health -= 10;
+                    addMessage(`🧟‍♂️ Zombie attacked you! Health now ${player.health}`);
+                    let cells = board.children;
+                    let attackedPlayerIndex = player.y * GRID_SIZE + player.x;
+                    animateAttack(cells[attackedPlayerIndex]);
+                    if(player.health <= 0){
+                        showGameOver("💀 You died! Game Over.");
+                        disableControls();
+                    }
+                }
+            }
+        }
+
+        function playerAttack() {
+            let attacked = false;
+            let cells = board.children;
+            zombies.forEach((z) => {
+                if(z.alive && isAdjacent(player.x, player.y, z.x, z.y)) {
+                    z.health -= 30;
+                    let attackedIndex = z.y * GRID_SIZE + z.x;
+                    animateAttack(cells[attackedIndex]);
+                    addMessage(`⚔️ Attacked Zombie! Zombie health now ${z.health}`);
+                    if(z.health <= 0) {
+                        z.alive = false;
+                        player.score += 100;
+                        addMessage(`💥 Zombie killed! Score: ${player.score}`);
+                    }
+                    attacked = true;
+                }
+            });
+            if(!attacked) addMessage("❌ No zombies in range to attack.");
+        }
+
+        function movePlayer(direction) {
+            let newX = player.x;
+            let newY = player.y;
+            switch(direction){
+                case 'w': if(player.y > 0) newY--; break;
+                case 's': if(player.y < GRID_SIZE - 1) newY++; break;
+                case 'a': if(player.x > 0) newX--; break;
+                case 'd': if(player.x < GRID_SIZE - 1) newX++; break;
+            }
+            // Check for health pack pickup
+            const hpIdx = healthPacks.findIndex(hp => hp.alive && hp.x === newX && hp.y === newY);
+            if(hpIdx !== -1) {
+                player.health = Math.min(100, player.health + 30);
+                healthPacks[hpIdx].alive = false;
+                addMessage(`❤️ Picked up health pack! Health: ${player.health}`);
+            }
+            player.x = newX;
+            player.y = newY;
+        }
+
+        function addMessage(text) {
+            let p = document.createElement('p');
+            p.textContent = text;
+            messages.appendChild(p);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function handleInput(action) {
+            if(gameOver) return;
+            if(action === 'f') {
+                playerAttack();
+            } else {
+                movePlayer(action);
+                moveZombies();
+                round++;
+            }
+            render();
+            if(zombies.filter(z => z.alive).length === 0){
+                showGameOver("🏆 All zombies defeated! You Win!");
+                disableControls();
+            }
+        }
+
+        function disableControls() {
+            document.querySelectorAll('#controls button').forEach(btn => {
+                btn.disabled = true;
+                btn.style.cursor = 'default';
+                btn.style.backgroundColor = '#666';
+            });
+            gameOver = true;
+            window.removeEventListener('keydown', keyDownHandler);
+        }
+
+        function keyDownHandler(e) {
+            let key = e.key.toLowerCase();
+            if(['w','a','s','d','f'].includes(key)) handleInput(key);
+        }
+
+        function showGameOver(msg) {
+            modalMessage.textContent = msg;
+            modal.classList.add('show');
+        }
+
+        function restartGame() {
+            modal.classList.remove('show');
+            gameOver = false;
+            player = {x: 2, y: 2, health: 100, score: 0};
+            round = 1;
+            healthPacks = [];
+            zombies = [];
+            messages.innerHTML = '';
+            initZombies();
+            initHealthPacks();
+            setupControls();
+            render();
+        }
+
+        function setupControls() {
+            document.querySelectorAll('#controls button').forEach(btn => {
+                btn.disabled = false;
+                btn.style.cursor = 'pointer';
+                btn.style.background = 'linear-gradient(145deg, #555, #444)';
+                btn.removeEventListener('click', () => {});
+                btn.addEventListener('click', () => {
+                    handleInput(btn.getAttribute('data-action'));
+                });
+            });
+            window.addEventListener('keydown', keyDownHandler);
+        }
+
+        restartBtn.addEventListener('click', restartGame);
+
+        // Initialize Game
+        initZombies();
+        initHealthPacks();
+        setupControls();
+        render();
+    </script>
 </body>
 </html>

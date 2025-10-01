@@ -1,34 +1,17 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #121212;
+    background: linear-gradient(
+        rgba(18, 18, 18, 0.7),
+        rgba(22, 33, 62, 0.7)
+    ), url("assets/bg/zombie-bg.jpg") no-repeat center center fixed;
+    background-size: cover;
     color: #e0e0e0;
-    margin: 20px;
-    text-align: center;
-}
-h1 {
-    color: #ff3b3f;
-}
-.status-panel {
-    margin: 20px auto;
-    max-width: 300px;
-    padding: 10px;
-    background-color: #1f1f1f;
-    border-radius: 8px;
-}
-.health-bar {
-    width: 100%;
-    background-color: #555;
-    border-radius: 8px;
-    height: 25px;
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
-}
-.health-fill {
-    height: 100%;
-    background-color: #ff3b3f;
-    border-radius: 8px 0 0 8px;
-}
-.zombie-count, .score, .round {
-    font-size: 2em;
-    margin-top: 10px;
-    color: #ffcc00;
 }
